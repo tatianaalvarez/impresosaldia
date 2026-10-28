@@ -11,17 +11,22 @@ import {
   SoporteFiscalDIAN, 
   DenominacionConteo, 
   ArqueoActa, 
-  ComprobanteCierreReembolso 
+  ComprobanteCierreReembolso,
+  ReciboReintegro,
+  CierreDiarioActa
 } from './types';
 import { 
   INITIAL_CONFIG, 
   INITIAL_VALES, 
   INITIAL_SOPORTES, 
   INITIAL_DENOMINACIONES, 
-  INITIAL_HISTORICO_ARQUEOS 
+  INITIAL_HISTORICO_ARQUEOS,
+  INITIAL_REINTEGROS
 } from './data/initialData';
 import { Header } from './components/Header';
 import { DashboardView } from './components/DashboardView';
+import { ReconciliacionView } from './components/ReconciliacionView';
+import { CierreDiarioView } from './components/CierreDiarioView';
 import { FlujogramaView } from './components/FlujogramaView';
 import { OcrCaptureView } from './components/OcrCaptureView';
 import { ValesView } from './components/ValesView';
@@ -33,6 +38,8 @@ import { ActaModal } from './components/ActaModal';
 import { PdfViewerModal } from './components/PdfViewerModal';
 import { CierreMesModal } from './components/CierreMesModal';
 import { PWAInstallModal } from './components/PWAInstallModal';
+import { ReciboReintegroModal } from './components/ReciboReintegroModal';
+import { ActaCierreDiarioModal } from './components/ActaCierreDiarioModal';
 
 export default function App() {
   // Configuración del fondo
@@ -65,6 +72,18 @@ export default function App() {
     return saved ? JSON.parse(saved) : INITIAL_HISTORICO_ARQUEOS;
   });
 
+  // Recibos Oficiales de Reintegro de Efectivo
+  const [recibosReintegro, setRecibosReintegro] = useState<ReciboReintegro[]>(() => {
+    const saved = localStorage.getItem('caja_menor_reintegros');
+    return saved ? JSON.parse(saved) : INITIAL_REINTEGROS;
+  });
+
+  // Actas de Cierre Diario de Caja
+  const [cierresDiariosHistorico, setCierresDiariosHistorico] = useState<CierreDiarioActa[]>(() => {
+    const saved = localStorage.getItem('caja_menor_cierres_diarios');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   // Rol activo y pestaña activa
   const [currentRole, setCurrentRole] = useState<UserRole>('custodio');
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -80,6 +99,8 @@ export default function App() {
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [showCierreMesModal, setShowCierreMesModal] = useState(false);
   const [showPwaModal, setShowPwaModal] = useState(false);
+  const [activeReciboModal, setActiveReciboModal] = useState<ReciboReintegro | null>(null);
+  const [activeCierreDiarioModal, setActiveCierreDiarioModal] = useState<CierreDiarioActa | null>(null);
 
   // Persistencia en localStorage
   useEffect(() => {
@@ -97,6 +118,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('caja_menor_actas', JSON.stringify(historicoActas));
   }, [historicoActas]);
+
+  useEffect(() => {
+    localStorage.setItem('caja_menor_reintegros', JSON.stringify(recibosReintegro));
+  }, [recibosReintegro]);
+
+  useEffect(() => {
+    localStorage.setItem('caja_menor_cierres_diarios', JSON.stringify(cierresDiariosHistorico));
+  }, [cierresDiariosHistorico]);
 
   useEffect(() => {
     localStorage.setItem('caja_menor_periodo_bloqueado', periodoBloqueado ? 'true' : 'false');
@@ -149,6 +178,59 @@ export default function App() {
       }
       return v;
     }));
+
+    // Si hubo sobrante en efectivo devuelto, reintegrarlo al saldo físico de la caja menor
+    if (sobranteCOP > 0) {
+      reintegrarEfectivoACaja(sobranteCOP);
+    }
+  };
+
+  // Reintegrar sobrante en efectivo repartiendo en billetes/monedas
+  const reintegrarEfectivoACaja = (montoReintegrarCOP: number) => {
+    let restante = montoReintegrarCOP;
+    setDenominaciones(prev => {
+      const actualizadas = [...prev];
+      for (let i = 0; i < actualizadas.length; i++) {
+        const val = actualizadas[i].valorUnitario;
+        if (restante >= val) {
+          const sumar = Math.floor(restante / val);
+          actualizadas[i].cantidad += sumar;
+          actualizadas[i].subtotal = actualizadas[i].cantidad * val;
+          restante %= val;
+        }
+      }
+      return actualizadas;
+    });
+  };
+
+  const handleEmitirReintegro = (nuevoRecibo: ReciboReintegro, valeId: string, gastoRealCOP: number, sobranteCOP: number) => {
+    setRecibosReintegro(prev => [nuevoRecibo, ...prev]);
+
+    // Actualizar vale a legalizado
+    setVales(prev => prev.map(v => {
+      if (v.id === valeId) {
+        return {
+          ...v,
+          estado: 'LEGALIZADO',
+          montoGastadoRealCOP: gastoRealCOP,
+          sobranteReintegradoCOP: sobranteCOP,
+        };
+      }
+      return v;
+    }));
+
+    // Restablecer saldo físico con el sobrante
+    if (sobranteCOP > 0) {
+      reintegrarEfectivoACaja(sobranteCOP);
+    }
+
+    // Abrir modal de vista e impresión del recibo
+    setActiveReciboModal(nuevoRecibo);
+  };
+
+  const handleEmitirCierreDiario = (nuevaActa: CierreDiarioActa) => {
+    setCierresDiariosHistorico(prev => [nuevaActa, ...prev]);
+    setActiveCierreDiarioModal(nuevaActa);
   };
 
   const handleRegistrarSoporte = (nuevoSoporte: SoporteFiscalDIAN, valeIdParaLegalizar?: string) => {
@@ -177,6 +259,10 @@ export default function App() {
         }
         return v;
       }));
+
+      if (sobrante > 0) {
+        reintegrarEfectivoACaja(sobrante);
+      }
     }
   };
 
@@ -240,6 +326,8 @@ export default function App() {
       setSoportes(INITIAL_SOPORTES);
       setDenominaciones(INITIAL_DENOMINACIONES);
       setHistoricoActas(INITIAL_HISTORICO_ARQUEOS);
+      setRecibosReintegro(INITIAL_REINTEGROS);
+      setCierresDiariosHistorico([]);
       setPeriodoBloqueado(false);
       localStorage.clear();
     }
@@ -281,6 +369,36 @@ export default function App() {
             onOpenOcr={() => setActiveTab('ocr')}
             onOpenArqueo={() => setActiveTab('arqueo')}
             onOpenCierreMes={() => setShowCierreMesModal(true)}
+          />
+        )}
+
+        {/* PESTAÑA 1 NUEVA: DEVOLUCIONES DE DINERO Y RECONCILIACIÓN DE VALES */}
+        {activeTab === 'reconciliacion' && (
+          <ReconciliacionView
+            config={config}
+            vales={vales}
+            soportes={soportes}
+            recibosReintegro={recibosReintegro}
+            onEmitirReintegro={handleEmitirReintegro}
+            onVerReciboModal={(rec) => setActiveReciboModal(rec)}
+            currentRole={currentRole}
+          />
+        )}
+
+        {/* PESTAÑA 2 NUEVA: CIERRE DEL DÍA (CIERRE DIARIO DE CAJA) */}
+        {activeTab === 'cierre_diario' && (
+          <CierreDiarioView
+            config={config}
+            vales={vales}
+            soportes={soportes}
+            recibosReintegro={recibosReintegro}
+            efectivoFisicoCOP={efectivoFisicoCOP}
+            valesActivosCOP={valesActivosCOP}
+            facturasLiquidadasCOP={facturasLiquidadasCOP}
+            onEmitirCierreDiario={handleEmitirCierreDiario}
+            onVerActaModal={(acta) => setActiveCierreDiarioModal(acta)}
+            cierresDiariosHistorico={cierresDiariosHistorico}
+            currentRole={currentRole}
           />
         )}
 
@@ -381,6 +499,24 @@ export default function App() {
         <PWAInstallModal
           onClose={() => setShowPwaModal(false)}
           onResetData={handleResetData}
+        />
+      )}
+
+      {/* MODAL RECIBO DIGITAL DE REINTEGRO DE EFECTIVO */}
+      {activeReciboModal && (
+        <ReciboReintegroModal
+          recibo={activeReciboModal}
+          config={config}
+          onClose={() => setActiveReciboModal(null)}
+        />
+      )}
+
+      {/* MODAL ACTA OFICIAL DE BALANCE Y CIERRE DIARIO */}
+      {activeCierreDiarioModal && (
+        <ActaCierreDiarioModal
+          acta={activeCierreDiarioModal}
+          config={config}
+          onClose={() => setActiveCierreDiarioModal(null)}
         />
       )}
 

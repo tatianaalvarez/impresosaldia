@@ -8,7 +8,6 @@ import {
   Clock, 
   AlertTriangle, 
   CheckCircle2, 
-  ShieldCheck, 
   ArrowRight, 
   Building, 
   FileCheck,
@@ -292,7 +291,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
               <div className="flex items-center gap-2 text-white font-bold text-base">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <span className="w-5 h-5 rounded-md bg-emerald-500/20 text-emerald-400 font-bold font-mono text-xs flex items-center justify-center">$</span>
                 <span>Puntos de Control Legal Automatizados (Estatuto Tributario)</span>
               </div>
               <span className="text-xs text-slate-400">Verificaciones en vivo</span>

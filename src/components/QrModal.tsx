@@ -1,7 +1,7 @@
 import React from 'react';
 import { Vale, FundConfig } from '../types';
 import { formatCOP, formatFechaCO, calcularDiasRestantesLegalizacion } from '../utils/formatters';
-import { QrCode, Printer, CheckCircle2, ShieldCheck, X } from 'lucide-react';
+import { QrCode, Printer, CheckCircle2, X } from 'lucide-react';
 
 interface QrModalProps {
   vale: Vale;

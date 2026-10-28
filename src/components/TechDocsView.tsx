@@ -8,7 +8,6 @@ import {
   Copy, 
   Check, 
   Send, 
-  ShieldCheck, 
   Scale, 
   FileCode,
   Layers,

@@ -9,7 +9,6 @@ import {
   CheckCircle2, 
   AlertTriangle, 
   FileCheck, 
-  ShieldCheck, 
   Hash, 
   PenTool, 
   Sparkles, 
@@ -382,7 +381,7 @@ export const ArqueoView: React.FC<ArqueoViewProps> = ({
                 type="submit"
                 className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/20 cursor-pointer"
               >
-                <ShieldCheck className="w-4 h-4" />
+                <span className="font-mono font-black text-sm">$</span>
                 <span>Firmar y Generar Acta Inmutable Oficial</span>
               </button>
             </form>

@@ -132,3 +132,69 @@ export interface ComprobanteCierreReembolso {
   aprobadoContador: boolean;
   fechaPagoTransferencia?: string;
 }
+
+export interface FacturaResumenItem {
+  id: string;
+  numeroConsecutivo: string;
+  tipo: TipoSoporte;
+  razonSocialEmisor: string;
+  nitEmisor: string;
+  conceptoGasto: string;
+  totalCOP: number;
+  fechaEmision: string;
+}
+
+export interface ReciboReintegro {
+  id: string;
+  consecutivo: string; // ej: REINT-2026-008
+  fechaHora: string;
+  valeId: string;
+  codigoVale: string;
+  colaboradorNombre: string;
+  colaboradorCedula: string;
+  colaboradorCargo: string;
+  montoEntregadoCOP: number;
+  montoUtilizadoCOP: number;
+  sobranteDevueltoCOP: number; // Monto Entregado - Monto Utilizado
+  custodioReceptor: string;
+  facturasAsociadas: FacturaResumenItem[];
+  observaciones?: string;
+  hashVerificacionSHA256: string;
+  firmaColaborador: string;
+  firmaCustodio: string;
+}
+
+export interface MovimientoDiario {
+  id: string;
+  hora: string;
+  tipo: 'DESEMBOLSO_VALE' | 'FACTURA_COMPRA' | 'REINTEGRO_SOBRANTE';
+  colaborador: string;
+  colaboradorCargo?: string;
+  proveedor?: string;
+  proveedorNit?: string;
+  referenciaComprobante: string; // ej: VAL-2026-041, FE-98214, REINT-2026-008
+  entradaEfectivoCOP: number;
+  salidaEfectivoCOP: number;
+  saldoResultanteCOP: number;
+  concepto: string;
+  centroCostoNombre: string;
+}
+
+export interface CierreDiarioActa {
+  id: string;
+  consecutivo: string; // ej: CIERRE-DIA-2026-10-28
+  fecha: string;
+  fechaHoraEmision: string;
+  saldoInicialDiaCOP: number;
+  totalAnticiposEntregadosCOP: number;
+  totalFacturasRecibidasCOP: number;
+  totalSobrantesReintegradosCOP: number;
+  saldoFinalEfectivoCOP: number;
+  fondoFijoTotalCOP: number;
+  movimientos: MovimientoDiario[];
+  observaciones: string;
+  hashInmutableSHA256: string;
+  firmaCustodio: string;
+  firmaAuditor: string;
+}
+

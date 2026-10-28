@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArqueoActa, FundConfig } from '../types';
 import { formatCOP, formatFechaCO } from '../utils/formatters';
-import { Printer, ShieldCheck, Scale, X, CheckCircle2 } from 'lucide-react';
+import { Printer, Scale, X, CheckCircle2 } from 'lucide-react';
 
 interface ActaModalProps {
   acta: ArqueoActa;
@@ -130,7 +130,7 @@ export const ActaModal: React.FC<ActaModalProps> = ({ acta, config, onClose }) =
         <div className="bg-slate-900 text-white p-3 rounded-xl mb-4 text-[10px] font-mono">
           <div className="flex items-center justify-between text-emerald-400 font-bold mb-1">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5" />
+              <span className="font-mono font-bold text-xs">$</span>
               <span>SELLO CRIPTOGRÁFICO DE INMUTABILIDAD DIAN-NIIF</span>
             </span>
             <span>VERIFICADO</span>

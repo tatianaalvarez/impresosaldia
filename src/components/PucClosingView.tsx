@@ -11,7 +11,7 @@ import {
   Building2, 
   Copy, 
   FileText,
-  DollarSign
+  Banknote
 } from 'lucide-react';
 
 interface PucClosingViewProps {
@@ -234,8 +234,8 @@ export const PucClosingView: React.FC<PucClosingViewProps> = ({
                 : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-700/20'
             }`}
           >
-            <DollarSign className="w-4 h-4" />
-            <span>Aprobar y Reembolsar a Caja</span>
+            <Banknote className="w-4 h-4" />
+            <span>Aprobar y Reembolsar a Caja (COP)</span>
           </button>
           <span className="text-[10px] text-slate-400 text-center">
             Repone el efectivo físico de la caja menor

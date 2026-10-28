@@ -1,9 +1,8 @@
 export function formatCOP(amount: number): string {
-  return new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
+  const num = new Intl.NumberFormat('es-CO', {
     maximumFractionDigits: 0,
-  }).format(amount);
+  }).format(Math.round(amount));
+  return `$ ${num} COP`;
 }
 
 export function formatFechaCO(dateStr: string): string {

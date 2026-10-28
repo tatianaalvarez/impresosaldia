@@ -13,7 +13,6 @@ import {
   Scale, 
   Sparkles, 
   X,
-  ShieldCheck,
   AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';

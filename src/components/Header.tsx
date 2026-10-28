@@ -3,7 +3,6 @@ import { UserRole, FundConfig } from '../types';
 import { formatCOP } from '../utils/formatters';
 import { 
   Building2, 
-  ShieldAlert, 
   CheckCircle2, 
   UserCheck, 
   AlertTriangle, 
@@ -76,6 +75,8 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navItems = [
     { id: 'dashboard', label: 'Ecuación & Saldos', icon: '📊' },
+    { id: 'reconciliacion', label: 'Devoluciones & Reconciliación', icon: '💸' },
+    { id: 'cierre_diario', label: 'Cierre Diario de Caja', icon: '📅' },
     { id: 'flujograma', label: 'Flujograma de Procesos', icon: '🔄' },
     { id: 'ocr', label: 'OCR & DIAN (Art. 616-1)', icon: '🧾' },
     { id: 'vales', label: 'Vales & Plazos (3-5d)', icon: '🎫' },
@@ -159,8 +160,13 @@ export const Header: React.FC<HeaderProps> = ({
                   </span>
                 </h1>
               </div>
-              <p className="text-xs text-slate-400">
-                Fondo Fijo Parametrizado: <strong className="text-white font-mono">{formatCOP(config.montoFondoTotalCOP)}</strong> | Tope: <span className="text-slate-300 font-mono">{formatCOP(config.topePorComprobanteCOP)}</span>
+              <p className="text-xs text-slate-400 flex items-center flex-wrap gap-1.5 mt-0.5">
+                <span>Fondo Fijo: <strong className="text-white font-mono">{formatCOP(config.montoFondoTotalCOP)}</strong></span>
+                <span>•</span>
+                <span>Tope Comprobante: <span className="text-slate-300 font-mono">{formatCOP(config.topePorComprobanteCOP)}</span></span>
+                <span className="px-1.5 py-0.2 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold font-mono">
+                  Pesos Colombianos (COP)
+                </span>
               </p>
             </div>
           </div>

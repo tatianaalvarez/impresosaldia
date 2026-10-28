@@ -9,9 +9,7 @@ import {
   CheckCircle2, 
   AlertTriangle, 
   XCircle, 
-  DollarSign, 
   UserCheck, 
-  ShieldAlert, 
   PlusCircle, 
   ArrowRight,
   Printer
@@ -370,7 +368,7 @@ export const ValesView: React.FC<ValesViewProps> = ({
             {checkProhibicion.bloqueado && (
               <div className="mb-4 p-3.5 bg-rose-950/40 border-2 border-rose-500/60 rounded-xl text-xs space-y-1.5">
                 <div className="flex items-center gap-2 text-rose-400 font-bold">
-                  <ShieldAlert className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-mono font-black text-rose-300 text-base">$</span>
                   <span>RECHAZO AUTOMÁTICO POR NORMATIVA VIGENTE</span>
                 </div>
                 <p className="text-rose-200">{checkProhibicion.motivo}</p>

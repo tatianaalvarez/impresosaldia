@@ -13,7 +13,6 @@ import {
   AlertTriangle, 
   XCircle, 
   FileText, 
-  ShieldCheck, 
   Building2, 
   Receipt,
   Sparkles,
@@ -567,7 +566,7 @@ export const OcrCaptureView: React.FC<OcrCaptureViewProps> = ({
                     Total Factura en COP *
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2 text-slate-500 font-mono text-xs">$</span>
+                    <span className="absolute left-2.5 top-2 text-emerald-400 font-mono font-bold text-xs">COP</span>
                     <input
                       type="number"
                       required
@@ -576,7 +575,7 @@ export const OcrCaptureView: React.FC<OcrCaptureViewProps> = ({
                       value={montoTotalCOP || ''}
                       onChange={(e) => setMontoTotalCOP(Number(e.target.value))}
                       placeholder="0"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-7 pr-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                      className="w-full bg-slate-900 border border-slate-700 rounded-xl pl-12 pr-3 py-2 text-xs font-mono font-bold text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
                   <span className="text-[10px] text-slate-400">Tope: {formatCOP(config.topePorComprobanteCOP)}</span>
@@ -640,7 +639,7 @@ export const OcrCaptureView: React.FC<OcrCaptureViewProps> = ({
               type="submit"
               className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-700/20 cursor-pointer"
             >
-              <ShieldCheck className="w-4 h-4" />
+              <span className="font-mono font-black text-sm">$</span>
               <span>Validar con DIAN y Radicar en Caja Menor (COP)</span>
             </button>
           </form>

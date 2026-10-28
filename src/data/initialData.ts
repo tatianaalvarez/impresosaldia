@@ -238,3 +238,37 @@ export const INITIAL_HISTORICO_ARQUEOS: ArqueoActa[] = [
     firmaAuditor: 'Andrés Gómez - TP 149204-T',
   },
 ];
+
+export const INITIAL_REINTEGROS = [
+  {
+    id: 'reint-001',
+    consecutivo: 'REINT-2026-004',
+    fechaHora: '2026-10-24T16:45:00Z',
+    valeId: 'val-003',
+    codigoVale: 'VAL-2026-039',
+    colaboradorNombre: 'Diana Montoya',
+    colaboradorCedula: '1.020.450.311',
+    colaboradorCargo: 'Líder de Preprensa CTP',
+    montoEntregadoCOP: 48000,
+    montoUtilizadoCOP: 48000,
+    sobranteDevueltoCOP: 0,
+    custodioReceptor: 'Mariana López',
+    facturasAsociadas: [
+      {
+        id: 'sop-001',
+        numeroConsecutivo: 'SETP-98214',
+        tipo: 'FACTURA_ELECTRONICA' as const,
+        razonSocialEmisor: 'Panamericana Librería y Papelería S.A.',
+        nitEmisor: '830037946',
+        conceptoGasto: 'Cuchillas circulares para guillotina y bisturíes de precisión',
+        totalCOP: 48000,
+        fechaEmision: '2026-10-25T11:20:00Z',
+      }
+    ],
+    observaciones: 'Reconciliación exacta: El anticipo entregado coincidió 100% con la factura Panamericana SETP-98214.',
+    hashVerificacionSHA256: 'sha256:reint-dian-48k-medellin-20261024',
+    firmaColaborador: 'Diana Montoya - Líder Preprensa',
+    firmaCustodio: 'Mariana López - Custodio Oficial',
+  }
+];
+

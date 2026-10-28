@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { UserRole } from '../types';
 import { 
   GitBranch, 
-  ShieldCheck, 
   AlertTriangle, 
   CheckCircle2, 
   Clock, 
@@ -14,7 +13,7 @@ import {
   ArrowDown, 
   ArrowRight, 
   Building2, 
-  DollarSign, 
+  Banknote, 
   Lock,
   UserCheck
 } from 'lucide-react';
@@ -30,7 +29,7 @@ export const FlujogramaView: React.FC = () => {
       rol: 'SOLICITANTE',
       rolNombre: 'Colaborador / Operario de Planta',
       rolBadge: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-      icono: <DollarSign className="w-5 h-5 text-blue-400" />,
+      icono: <Banknote className="w-5 h-5 text-blue-400" />,
       descripcion: 'El solicitante ingresa el concepto justificado y el monto exacto en Pesos Colombianos (COP) vía App móvil o Web.',
       controles: ['Monto en COP', 'Asociación a Centro de Costos Medellín', 'Descripción operativa'],
       esPuntoControl: false,
@@ -41,7 +40,7 @@ export const FlujogramaView: React.FC = () => {
       rol: 'CUSTODIO',
       rolNombre: 'Custodio de Caja (Mariana López)',
       rolBadge: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-      icono: <ShieldCheck className="w-5 h-5 text-rose-400" />,
+      icono: <span className="font-mono font-black text-rose-400 text-lg">$</span>,
       descripcion: 'El motor de reglas evalúa automáticamente si el monto supera el tope de $250.000 COP o si incurre en prohibiciones legales taxativas.',
       controles: [
         '¿Excede tope de $250.000 COP? ➔ RECHAZADO (Trámite por Tesorería General)',
